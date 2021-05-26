@@ -1,0 +1,36 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+    }
+    buildFeatures {
+        buildConfig = false
+    }
+    sourceSets {
+        main {
+            assets.srcDirs += "$buildDir/generated/assets"
+        }
+    }
+}
+
+tasks.register('genUUID') {
+    def uuid = UUID.randomUUID().toString()
+    def uuid2 = UUID.randomUUID().toString()
+    def odir = file("$buildDir/generated/assets/model-en-us")
+    def odir2 = file("$buildDir/generated/assets/spk-model")
+    def ofile = file("$odir/uuid")
+    def ofile2 = file("$odir2/uuid")
+    doLast {
+        mkdir odir
+        ofile.text = uuid
+        mkdir odir2
+        ofile2.text = uuid2
+    }
+}
+
+preBuild.dependsOn(genUUID)
